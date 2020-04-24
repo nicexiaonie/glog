@@ -3,6 +3,7 @@ package hook
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"io/ioutil"
 	"os"
 	"time"
 )
@@ -11,8 +12,50 @@ type FileOut struct {
 	FilePath string
 	FileName string
 	Split    string
+	Lifetime time.Duration
 }
 
+func (current *FileOut) Init() {
+
+	if current.Lifetime != 0 {
+		//fmt.Println(111)
+		go func(current *FileOut) {
+			for {
+				time.Sleep(current.Lifetime)
+				//fmt.Printf("sleep %s \n", current.Lifetime )
+				files, _ := ioutil.ReadDir(current.FilePath)
+				for _, file := range files {
+					if file.IsDir() {
+						continue
+					}
+					if current.FileName != file.Name()[0:len(current.FileName)] {
+						continue
+					}
+					d := time.Now().Sub(file.ModTime())
+					//fmt.Printf("sub %s \n", d )
+					if d > (current.Lifetime) {
+						fileName := current.FilePath + file.Name()
+						//fmt.Printf("del %s \n", d )
+						_ = os.Remove(fileName)
+					}
+					//fmt.Println(current.Lifetime * time.Second)
+					//fmt.Printf("\n\n\n")
+				}
+			}
+		}(current)
+	}
+
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			linkName := current.FilePath + current.FileName
+			tmpLinkName := current.FilePath + current.FileName + "_symlink"
+			_ = os.Symlink(current.getFileName(), tmpLinkName)
+			_ = os.Rename(tmpLinkName, linkName);
+		}
+	}()
+
+}
 func (FileOut) Levels() []logrus.Level {
 	return logrus.AllLevels
 }
