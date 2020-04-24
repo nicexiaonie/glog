@@ -36,7 +36,7 @@ func (current FileOut) Fire(entry *logrus.Entry) error {
 func (current FileOut) getFileName() string {
 	date := ""
 	if len(current.Split) > 0 {
-		date = "." + time.Now().Format(current.Split)
+		date = time.Now().Format(current.Split)
 	}
 	fileName := current.FilePath + current.FileName + date
 	return fileName

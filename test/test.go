@@ -17,7 +17,7 @@ func main() {
 		Output:       "file",
 		ReportCaller: true,
 		Split:        "2006010215",
-		Lifetime:     2 * time.Second,
+		Lifetime:     200 * time.Second,
 	})
 	logger.WithField("A", 345).Errorf("adfet3tewtg")
 
