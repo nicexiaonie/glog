@@ -1,7 +1,6 @@
 package glog
 
 import (
-	"fmt"
 	"github.com/nicexiaonie/glog/hook"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -13,7 +12,8 @@ type Config struct {
 	Path     string
 	Filename string
 	Level    string
-	Format   string
+	// 格式化  json  text
+	Format string
 	// 输出  stdin file
 	Output       string
 	ReportCaller bool
@@ -27,10 +27,17 @@ func New(c *Config) *logrus.Logger {
 	log := logrus.New()
 	log.SetReportCaller(c.ReportCaller)
 
-	log.SetFormatter(&logrus.JSONFormatter{})
-	if c.Format == "text" {
+	switch c.Format {
+	case "json":
+		log.SetFormatter(&logrus.JSONFormatter{})
+		break
+	case "text":
 		log.SetFormatter(&logrus.TextFormatter{})
+		break
+	default:
+		break
 	}
+
 	switch c.Level {
 	case "debug":
 		log.SetLevel(logrus.DebugLevel)
@@ -52,12 +59,11 @@ func New(c *Config) *logrus.Logger {
 			Split:    c.Split,
 		}
 		log.AddHook(fileOut)
+		c.lifetime()
 		break
 	default:
 		break
 	}
-
-	c.lifetime()
 
 	return log
 
@@ -68,7 +74,7 @@ func (current *Config) lifetime() {
 	if current.Lifetime == 0 {
 		return
 	}
-	fmt.Println(111)
+	//fmt.Println(111)
 	go func(current *Config) {
 		for {
 			time.Sleep(current.Lifetime)
@@ -83,7 +89,7 @@ func (current *Config) lifetime() {
 				}
 				d := time.Now().Sub(file.ModTime())
 				//fmt.Printf("sub %s \n", d )
-				if d > (current.Lifetime ) {
+				if d > (current.Lifetime) {
 					fileName := current.Path + file.Name()
 					//fmt.Printf("del %s \n", d )
 					_ = os.Remove(fileName)
