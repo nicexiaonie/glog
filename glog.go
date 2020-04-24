@@ -18,7 +18,7 @@ type Config struct {
 	// 日志分割  "20060102150405"
 	Split    string
 	Lifetime time.Duration
-	//Rotation time.Duration
+	Hook     []logrus.Hook
 }
 
 func New(c *Config) *logrus.Logger {
@@ -47,6 +47,12 @@ func New(c *Config) *logrus.Logger {
 		log.SetLevel(logrus.ErrorLevel)
 	default:
 		log.SetLevel(logrus.InfoLevel)
+	}
+
+	if len(c.Hook) > 0 {
+		for _, v := range c.Hook {
+			log.AddHook(v)
+		}
 	}
 
 	switch c.Output {

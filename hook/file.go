@@ -51,7 +51,7 @@ func (current *FileOut) Init() {
 			linkName := current.FilePath + current.FileName
 			tmpLinkName := current.FilePath + current.FileName + "_symlink"
 			_ = os.Symlink(current.getFileName(), tmpLinkName)
-			_ = os.Rename(tmpLinkName, linkName);
+			_ = os.Rename(tmpLinkName, linkName)
 		}
 	}()
 
