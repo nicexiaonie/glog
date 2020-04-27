@@ -21,7 +21,7 @@ func (current *FileOut) Init() {
 		//fmt.Println(111)
 		go func(current *FileOut) {
 			for {
-				time.Sleep(current.Lifetime)
+
 				//fmt.Printf("sleep %s \n", current.Lifetime )
 				files, _ := ioutil.ReadDir(current.FilePath)
 				for _, file := range files {
@@ -41,6 +41,7 @@ func (current *FileOut) Init() {
 					//fmt.Println(current.Lifetime * time.Second)
 					//fmt.Printf("\n\n\n")
 				}
+				time.Sleep(current.Lifetime)
 			}
 		}(current)
 	}
