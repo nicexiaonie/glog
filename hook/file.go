@@ -28,6 +28,9 @@ func (current *FileOut) Init() {
 					if file.IsDir() {
 						continue
 					}
+					if len(file.Name()) <= len(current.FileName) {
+						continue
+					}
 					if current.FileName != file.Name()[0:len(current.FileName)] {
 						continue
 					}
