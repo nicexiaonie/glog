@@ -10,8 +10,11 @@ type Config struct {
 	Path     string
 	Filename string
 	Level    string
-	// 格式化  json  text
+	// 格式化  json  text formatter
 	Format string
+	// 自定义格式化程序
+	Formatter logrus.Formatter
+
 	// 输出  stdin file
 	Output       string
 	ReportCaller bool
@@ -32,6 +35,9 @@ func New(c *Config) *logrus.Logger {
 	case "text":
 		log.SetFormatter(&logrus.TextFormatter{})
 		break
+	case "formatter":
+		log.SetFormatter(c.Formatter)
+		break
 	default:
 		break
 	}
@@ -45,6 +51,12 @@ func New(c *Config) *logrus.Logger {
 		log.SetLevel(logrus.WarnLevel)
 	case "error":
 		log.SetLevel(logrus.ErrorLevel)
+	case "trace":
+		log.SetLevel(logrus.TraceLevel)
+	case "fatal":
+		log.SetLevel(logrus.FatalLevel)
+	case "panic":
+		log.SetLevel(logrus.PanicLevel)
 	default:
 		log.SetLevel(logrus.InfoLevel)
 	}
