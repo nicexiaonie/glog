@@ -10,10 +10,10 @@ import (
 func main() {
 
 	logger := glog.New(&glog.Config{
-		Path:         "/Users/nieyuanpei/Project/github/glog/log/",
+		Path:         "/usr/glog/",
 		Level:        "debug",
 		Filename:     "app.log",
-		Format:       "json",
+		Format:       "text",
 		Output:       "file",
 		ReportCaller: true,
 		Split:        ".2006010215",

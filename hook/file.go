@@ -67,7 +67,11 @@ func (FileOut) Levels() []logrus.Level {
 func (current FileOut) Fire(entry *logrus.Entry) error {
 
 	msg, _ := entry.String()
-	_ = os.MkdirAll(current.FilePath, os.ModePerm)
+	err := os.MkdirAll(current.FilePath, os.ModePerm)
+	if err != nil {
+		fmt.Println("failed: ", err)
+		os.Exit(1)
+	}
 	fileName := current.getFileName()
 
 	fd, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
