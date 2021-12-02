@@ -70,7 +70,7 @@ func (current FileOut) Fire(entry *logrus.Entry) error {
 	err := os.MkdirAll(current.FilePath, os.ModePerm)
 	if err != nil {
 		fmt.Println("failed: ", err)
-		os.Exit(1)
+		return err
 	}
 	fileName := current.getFileName()
 
