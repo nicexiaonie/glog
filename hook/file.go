@@ -35,16 +35,16 @@ func (current *FileOut) Init() {
 						continue
 					}
 					d := time.Now().Sub(file.ModTime())
-					//fmt.Printf("sub %s \n", d )
+					fmt.Printf("sub %s lifetime:%s \n", d, current.Lifetime)
 					if d > (current.Lifetime) {
 						fileName := current.FilePath + file.Name()
-						//fmt.Printf("del %s \n", d )
+						fmt.Printf("del %s fileName: %s \n", d, fileName)
 						_ = os.Remove(fileName)
 					}
 					//fmt.Println(current.Lifetime * time.Second)
 					//fmt.Printf("\n\n\n")
 				}
-				time.Sleep(current.Lifetime)
+				time.Sleep(time.Second * 10)
 			}
 		}(current)
 	}
@@ -73,7 +73,7 @@ func (current FileOut) Fire(entry *logrus.Entry) error {
 		return err
 	}
 	fileName := current.getFileName()
-
+	//fmt.Println("failed to open logfile:", current.FilePath, )
 	fd, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Println("failed to open logfile:", current.FilePath, err)
