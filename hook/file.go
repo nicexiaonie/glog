@@ -35,7 +35,7 @@ func (current *FileOut) Init() {
 						continue
 					}
 					d := time.Now().Sub(file.ModTime())
-					fmt.Printf("sub %s lifetime:%s \n", d, current.Lifetime)
+					//fmt.Printf("sub %s lifetime:%s \n", d, current.Lifetime)
 					if d > (current.Lifetime) {
 						fileName := current.FilePath + file.Name()
 						fmt.Printf("del %s fileName: %s \n", d, fileName)
